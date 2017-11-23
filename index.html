@@ -25,30 +25,26 @@
         margin-bottom: 20px;
         margin-left: 20px;
         margin-top: 10px;
-
-
       }
-      .chatuser{
-        display: flex;
-        justify-content: space-around;
-      } 
+      
 
       .userList{
         color: #1abc9c;
         float: right;
-        display: flex;
-        justify-content: center;
-        background-color: #9b59b6;
+        
         width: 25%;
-        height: 100%;
+        height: ´200px;
         word-wrap: break-word;
         margin-left: 1%;
 
       }
 
+      .ulist{
+        word-wrap: break-word;
+      }
+
       .chat{
         display: flex;
-        background-color: #95a5a6;
         width: 74%;
         word-wrap: break-word;
       }
@@ -58,20 +54,14 @@
 <div class="title">
   <h1>Harmony</h1>
 </div>
-<div class="chatUser">
 
 <div class="userList">
-  <h1> Users </h1>
-
-  <p>
+  
+  <h1> Online Users </h1>
    <body>
-
-    <ul id=ulist>
-
-    </ul>
-      
+    <ul id=ulist> </ul>
    </body>
-  </p>
+  
 </div>
 
 <div class="chat">
@@ -97,13 +87,20 @@
           window.scrollTo(0, document.body.scrollHeight);
         });
         socket.on("userlist request", function(list){
-          $("#ulist").append(list);
+            $("#ulist").empty();
+          for (var i = 0; i < list.length; i++) {
+            var string = "<p>" + list[i] + "</p>" ;
+            $("#ulist").append(string);
+          }
+
+          
+
+
         });
       });
     </script>
 
   </body>
-</div>
 </div>
 
 </html>
