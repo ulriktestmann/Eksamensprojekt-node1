@@ -13,13 +13,15 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-
+  
+  //connection ip variable
   var userIP = socket.handshake.address;
-  userArray.push(socket.handshake.address);
-  console.log("User connected from ip: " + userIP);
+  
+  //update array of users
+  userArray.push(userIP);
   console.log("Socket connection established: " + userIP);
 
-
+  //push userlist to clients
   io.emit("userlist push", userArray);
 
   //send chat message
@@ -37,6 +39,7 @@ io.on('connection', function(socket){
          array.splice(i,1);
         }
       }
+      
     userArray = array; 
     io.emit("userlist push", userArray);
     console.log("User disconnected from ip:  " + userIP); 
