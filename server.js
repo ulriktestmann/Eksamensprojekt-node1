@@ -1,27 +1,42 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var ip = require("ip");
 
 var port = process.env.PORT || 12000;
 var userArray = [];
 
 app.get('/', function(req, res){
-  	userArray.push(req.ip);
-  	console.log(userArray);
 
 	res.sendFile(__dirname + '/index.html');
 
 });
 
 io.on('connection', function(socket){
+
+  userArray.push(ip.address());
+  console.log("User connected from ip: " + ip.address());
+
   socket.on('chat message', function(msg){
-  	var clientIP = socket.request.connection.remoteAddress;
+  	var clientIP = ip.address();
   	msg = clientIP +": "+ msg;
     io.emit('chat message', msg);
   });
 
   socket.on("userlist request", function(){
-  	io.emit("userlist request", userArray);
+    io.emit("userlist request", userArray);
+  });
+
+  socket.on("disconnect", function(){
+    
+    var array = userArray;
+      for (var i = array.length - 1; i >= 0; --i) {
+        if (array[i] == ip.address()) {
+         array.splice(i,1);
+        }
+      }
+    userArray = array;
+    console.log("User disconnected from ip:  " + ip.address());
   });
 
 });
