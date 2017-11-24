@@ -14,14 +14,17 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
 
-  userArray.push(ip.address());
-  console.log("User connected from ip: " + ip.address());
+  var userIP = socket.handshake.address;
+  userArray.push(socket.handshake.address);
+  console.log("User connected from ip: " + userIP);
+  console.log("Socket connection established: " + userIP);
+
 
   io.emit("userlist push", userArray);
 
   //send chat message
   socket.on('chat message', function(msg){
-  	var clientIP = ip.address();
+  	var clientIP = userIP;
   	msg = clientIP +": "+ msg;
     io.emit('chat message', msg);
   });
@@ -30,13 +33,13 @@ io.on('connection', function(socket){
     
     var array = userArray;
       for (var i = array.length - 1; i >= 0; --i) {
-        if (array[i] == ip.address()) {
+        if (array[i] == userIP) {
          array.splice(i,1);
         }
       }
     userArray = array; 
     io.emit("userlist push", userArray);
-    console.log("User disconnected from ip:  " + ip.address()); 
+    console.log("User disconnected from ip:  " + userIP); 
   }); 
 
 });
