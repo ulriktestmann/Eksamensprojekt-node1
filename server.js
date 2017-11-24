@@ -7,7 +7,8 @@ var port = process.env.PORT || 12000;
 var userArray = [];
 
 app.get('/', function(req, res){
-//  userArray.push(req.ip);
+  //push user to array on page request
+  userArray.push(req.ip);
 	res.sendFile(__dirname + '/index.html');
 
 });
@@ -17,8 +18,8 @@ io.on('connection', function(socket){
   //connection ip variable
   var userIP = socket.handshake.address;
   
-  //update array of users
-  userArray.push(userIP);
+  //update array of users on socket connection
+  //userArray.push(userIP);
   console.log("Socket connection established: " + userIP);
 
   //push userlist to clients
