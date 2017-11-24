@@ -17,9 +17,6 @@ io.on('connection', function(socket){
   
   //connection ip variable
   var userIP = socket.handshake.address;
-  
-  //update array of users on socket connection
-  //userArray.push(userIP);
   console.log("Socket connection established: " + userIP);
 
   //push userlist to clients
@@ -44,6 +41,13 @@ io.on('connection', function(socket){
     userArray = array; 
     io.emit("userlist push", userArray);
     console.log("User disconnected from ip:  " + userIP); 
+
+    //push userlist on client request
+    socket.on("userlist request", function(){
+      io.emit("userlist push", userArray);
+      console.log("client request approved");
+    });
+
   }); 
 
 });
