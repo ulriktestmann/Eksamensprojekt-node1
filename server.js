@@ -7,7 +7,7 @@ var port = process.env.PORT || 12000;
 var userArray = [];
 
 app.get('/', function(req, res){
-
+//  userArray.push(req.ip);
 	res.sendFile(__dirname + '/index.html');
 
 });
@@ -17,14 +17,13 @@ io.on('connection', function(socket){
   userArray.push(ip.address());
   console.log("User connected from ip: " + ip.address());
 
+  io.emit("userlist push", userArray);
+
+  //send chat message
   socket.on('chat message', function(msg){
   	var clientIP = ip.address();
   	msg = clientIP +": "+ msg;
     io.emit('chat message', msg);
-  });
-
-  socket.on("userlist request", function(){
-    io.emit("userlist request", userArray);
   });
 
   socket.on("disconnect", function(){
@@ -35,9 +34,10 @@ io.on('connection', function(socket){
          array.splice(i,1);
         }
       }
-    userArray = array;
-    console.log("User disconnected from ip:  " + ip.address());
-  });
+    userArray = array; 
+    io.emit("userlist push", userArray);
+    console.log("User disconnected from ip:  " + ip.address()); 
+  }); 
 
 });
 

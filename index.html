@@ -57,7 +57,7 @@
 
 <div class="userList">
   
-  <h1> Online Users </h1>
+  <h1> Online Users: </h1>
    <body>
     <ul id=ulist> </ul>
    </body>
@@ -82,7 +82,7 @@
 
         $('form').submit(function(){
           socket.emit('chat message', $('#m').val());
-          socket.emit("userlist request");
+         // socket.emit("userlist request");
           $('#m').val(''); return false;
         });
 
