@@ -79,10 +79,9 @@
 
         var socket = io()
         
-
         $('form').submit(function(){
           socket.emit('chat message', $('#m').val());
-         // socket.emit("userlist request");
+         
           $('#m').val(''); return false;
         });
 
